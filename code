@@ -1,0 +1,52 @@
+def dijkstra_matrix_array(graph, source):
+    n = len(graph)
+
+    # dist[v] = shortest distance currently known from source to v
+    dist = [float('inf')] * n
+
+    # parent[v] = previous vertex on shortest path
+    parent = [-1] * n
+
+    # False means the vertex is still in the priority queue
+    visited = [False] * n
+
+    # Distance from source to itself is 0
+    dist[source] = 0
+
+    # At most n vertices are extracted
+    for _ in range(n):
+
+        # --------------------------------------
+        # Extract-Min using an ARRAY
+        # --------------------------------------
+        u = -1
+        min_dist = float('inf')
+
+        for v in range(n):
+            if not visited[v] and dist[v] < min_dist:
+                min_dist = dist[v]
+                u = v
+
+        # No more reachable vertices
+        if u == -1:
+            break
+
+        # Remove u from the priority queue
+        visited[u] = True
+
+        # --------------------------------------
+        # Scan row u of the adjacency matrix
+        # --------------------------------------
+        for v in range(n):
+
+            weight = graph[u][v]
+
+            # Check if edge (u, v) exists
+            if weight != float('inf') and not visited[v]:
+
+                # Relax(u, v)
+                if dist[v] > dist[u] + weight:
+                    dist[v] = dist[u] + weight
+                    parent[v] = u
+
+    return dist, parent
